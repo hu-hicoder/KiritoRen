@@ -16,16 +16,15 @@ chrome.runtime.onInstalled.addListener(() => {
     });
 });
 
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    console.log("Received message:", request);
-    if (request.action === "startScreenshot" && request.tabId) {
-        console.log("Executing script in tab:", request.tabId);
+chrome.action.onClicked.addListener((tab) => {
+    if (tab.id) {
+        console.log("Action button clicked");
         chrome.scripting.executeScript({
-            target: { tabId: request.tabId },
+            target: { tabId: tab.id },
             function: startScreenshot
         });
     } else {
-        console.error("Tab ID is undefined or request action is incorrect");
+        console.error("No active tab found");
     }
 });
 
